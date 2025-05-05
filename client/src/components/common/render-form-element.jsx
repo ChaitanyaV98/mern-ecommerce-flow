@@ -1,10 +1,16 @@
 import { Input } from "@/components/ui/input";
-import { Select, SelectTrigger, SelectValue } from "../ui/select";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectItem,
+  SelectContent,
+} from "../ui/select";
 import { Textarea } from "../ui/textarea";
 
-function RenderFormElement({ currentItem, value, onChange }) {
+function RenderFormElement({ currentItem, value, onChange, setFormData }) {
   let content = null;
-  switch (currentItem.commonType) {
+  switch (currentItem.componentType) {
     case "input":
       content = (
         <Input
@@ -19,9 +25,14 @@ function RenderFormElement({ currentItem, value, onChange }) {
       break;
     case "select":
       content = (
-        <Select value={value} onValueChange={onChange}>
+        <Select
+          value={value}
+          onValueChange={(val) =>
+            setFormData((prev) => ({ ...prev, [currentItem.name]: val }))
+          }
+        >
           <SelectTrigger className="w-full">
-            <SelectValue value={currentItem.placeholder} />
+            <SelectValue placeholder={currentItem.label} />
           </SelectTrigger>
           <SelectContent>
             {currentItem.options && currentItem.options.length > 0
@@ -35,7 +46,7 @@ function RenderFormElement({ currentItem, value, onChange }) {
         </Select>
       );
       break;
-    case "textArea ":
+    case "textarea":
       content = (
         <Textarea
           name={currentItem.name}

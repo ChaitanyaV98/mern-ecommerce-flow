@@ -12,11 +12,12 @@ function CommonForm({
     <form onSubmit={onSubmit}>
       <div className="flex flex-col gap-3">
         {formControls.map((controlItem) => (
-          <div key={controlItem.name} className="w-full grid  gap-1.5">
+          <div key={controlItem.name} className="grid w-full  gap-1.5">
             <Label className="mb-1">{controlItem.label}</Label>
             <RenderFormElement
               currentItem={controlItem}
               value={formData[controlItem.name]}
+              setFormData={setFormData}
               onChange={(event) => {
                 setFormData({
                   ...formData,
@@ -26,11 +27,10 @@ function CommonForm({
             />
           </div>
         ))}
-
-        <Button type="submit" className="mt-2 w-full">
-          {buttonText ? buttonText : "Submit"}
-        </Button>
       </div>
+      <Button type="submit" className="mt-2 w-full">
+        {buttonText ? buttonText : "Submit"}
+      </Button>
     </form>
   );
 }
