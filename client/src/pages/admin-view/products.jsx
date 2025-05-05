@@ -8,12 +8,16 @@ import {
 } from "@/components/ui/sheet";
 import CommonForm from "@/components/common/form";
 import { addProductFormElements, initialProductFormData } from "@/config";
+import ProductImageUpload from "@/components/admin-view/image-upload";
 
 function AdminProducts() {
   const [openCreateProductsDialog, setOpenCreateProductsDialog] =
     useState(false);
 
   const [formData, setFormData] = useState(initialProductFormData);
+
+  const [imageFile, setImageFile] = useState(null);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState("");
 
   const onSubmit = () => {
     console.log("Clicked on submit form");
@@ -36,6 +40,12 @@ function AdminProducts() {
           <SheetHeader>
             <SheetTitle>Add New Product</SheetTitle>
           </SheetHeader>
+          <ProductImageUpload
+            imageFile={imageFile}
+            setImageFile={setImageFile}
+            uploadedImageUrl={uploadedImageUrl}
+            setUploadedImageUrl={setUploadedImageUrl}
+          />
           <div className="px-4">
             <CommonForm
               formControls={addProductFormElements}
