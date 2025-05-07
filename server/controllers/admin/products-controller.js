@@ -1,4 +1,4 @@
-import { imageUploadUtil } from "../../helpers/cloudinary";
+import { imageUploadUtil } from "../../helpers/cloudinary.js";
 
 export const handleImageUpload = async (req, res) => {
   try {
