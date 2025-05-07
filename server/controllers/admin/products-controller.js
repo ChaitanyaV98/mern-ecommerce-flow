@@ -28,6 +28,7 @@ export const addProduct = async (req, res) => {
     const {
       image,
       title,
+      brand,
       description,
       category,
       price,
@@ -40,8 +41,10 @@ export const addProduct = async (req, res) => {
       title,
       description,
       category,
+      brand,
       price,
       salePrice,
+      brand,
       totalStock,
     });
     await newlyCreatedProduct.save();
@@ -92,10 +95,11 @@ export const updateProduct = async (req, res) => {
       description,
       category,
       price,
+      brand,
       salePrice,
       totalStock,
     } = req.body;
-    const findProduct = await Product.find(id);
+    const findProduct = await Product.findById(id);
     if (!findProduct) {
       res.status(404).json({
         success: false,
