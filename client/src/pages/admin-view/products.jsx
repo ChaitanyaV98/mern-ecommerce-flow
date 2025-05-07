@@ -18,6 +18,7 @@ function AdminProducts() {
 
   const [imageFile, setImageFile] = useState(null);
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
+  const [imageLoadingState, setImageLoadingState] = useState(false);
 
   const onSubmit = () => {
     console.log("Clicked on submit form");
@@ -45,6 +46,8 @@ function AdminProducts() {
             setImageFile={setImageFile}
             uploadedImageUrl={uploadedImageUrl}
             setUploadedImageUrl={setUploadedImageUrl}
+            imageLoadingState={imageLoadingState}
+            setImageLoadingState={setImageLoadingState}
           />
           <div className="px-4">
             <CommonForm

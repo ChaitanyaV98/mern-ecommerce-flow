@@ -1,25 +1,21 @@
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { UploadCloudIcon, XIcon } from "lucide-react";
 import { FileIcon } from "lucide-react";
+import axios from "axios";
 
 function ProductImageUpload({
   imageFile,
   setImageFile,
   uploadedImageUrl,
   setUploadedImageUrl,
+  imageLoadingState,
+  setImageLoadingState,
 }) {
   const inputRef = useRef(null);
-  //   function handleImageFileChange(event) {
-  //     console.log("EVENT TARGET FILES", event.target.files);
-  //     const selectedFile = event.target.files?.[0];
-  //     console.log("SELECTED FILE ", selectedFile);
-  //     if (selectedFile) {
-  //       setImageFile(selectedFile);
-  //     }
-  //   }
+
   function handleImageFileChange(event) {
     try {
       const selectedFile = event.target.files?.[0];
@@ -50,6 +46,27 @@ function ProductImageUpload({
       inputRef.current.value = "";
     }
   }
+
+  async function uploadImageToCloudinary() {
+    setImageLoadingState(true);
+    const payload = new FormData();
+    payload.append("my-file", imageFile);
+    console.log("DATA FOR UPLOAD IMAGE", payload);
+    const response = await axios.post(
+      "http://localhost:3000/api/admin/products/upload-image",
+      payload
+    );
+    if (response) {
+      setUploadedImageUrl(response.data.result.url);
+      setImageLoadingState(false);
+    }
+  }
+
+  useEffect(() => {
+    if (imageFile !== null) {
+      uploadImageToCloudinary();
+    }
+  }, [imageFile]);
   return (
     <div className="w-full max-w-md mx-auto px-4 mt-4">
       <Label className="text-lg font-semibold mb-2  block">Upload Image</Label>
