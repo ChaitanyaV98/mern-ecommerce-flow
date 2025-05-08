@@ -72,6 +72,7 @@ export const loginUser = async (req, res) => {
         id: checkUser._id,
         role: checkUser.role,
         email: checkUser.email,
+        username: checkUser.username,
       },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "1h" }
