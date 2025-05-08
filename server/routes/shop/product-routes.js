@@ -4,6 +4,6 @@ import { getFilteredProducts } from "../../controllers/shop/products-controller.
 
 const shopProductRouter = express.Router();
 
-adminProductRouter.get("/get", getFilteredProducts);
+shopProductRouter.get("/get", getFilteredProducts);
 
 export default shopProductRouter;
