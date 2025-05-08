@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import authRouter from "./routes/auth-routes.js";
 import adminProductRouter from "./routes/admin/product-routes.js";
+import shopProductRouter from "./routes/shop/product-routes.js";
 
 const app = express();
 
@@ -46,6 +47,7 @@ app.use(express.json());
 //routing
 app.use("/api/auth", authRouter);
 app.use("/api/admin/products", adminProductRouter);
+app.use("/api/shop/products", shopProductRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running at ${PORT}`);
