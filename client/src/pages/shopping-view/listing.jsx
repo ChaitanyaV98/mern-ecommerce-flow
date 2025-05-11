@@ -18,18 +18,19 @@ import { useSearchParams } from "react-router-dom";
 function ShoppingListing() {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const [filters, setFilters] = useState({});
+  const [sort, setSort] = useState(null);
   const { productList } = useSelector((state) => state.shopProducts);
 
   useEffect(() => {
-    dispatch(fetchAllFilteredProducts());
-  }, []);
-
-  const [filters, setFilters] = useState({});
-  const [sort, setSort] = useState(null);
+    if (filters !== null && sort !== null)
+      dispatch(
+        fetchAllFilteredProducts({ filterParams: filters, sortParams: sort })
+      );
+    // dispatch(fetchAllFilteredProducts());
+  }, [dispatch, sort, filters]);
 
   const handleSort = (value) => {
-    console.log("HANDLE SORT VALUE----", value);
     setSort(value);
   };
 

@@ -8,8 +8,8 @@ const initialState = {
 
 export const fetchAllFilteredProducts = createAsyncThunk(
   "/products/fetchAllProducts",
-  async () => {
-    return await getAllFilteredProducts();
+  async ({ filterParams, sortParams }) => {
+    return await getAllFilteredProducts({ filterParams, sortParams });
   }
 );
 
