@@ -9,7 +9,10 @@ import {
 import { ArrowUpDownIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { sortOptions } from "@/config";
-import { fetchAllFilteredProducts } from "@/store/shop/productSlice";
+import {
+  fetchAllFilteredProducts,
+  fetchProductDetails,
+} from "@/store/shop/productSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import ShoppingProductTile from "@/components/shopping-view/product-tile";
@@ -20,7 +23,9 @@ function ShoppingListing() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
-  const { productList } = useSelector((state) => state.shopProducts);
+  const { productList, productDetails } = useSelector(
+    (state) => state.shopProducts
+  );
 
   useEffect(() => {
     if (filters !== null && sort !== null)
@@ -84,6 +89,13 @@ function ShoppingListing() {
 
   console.log("search params to string", searchParams.toString());
 
+  function handleGetProductDetails(getCurrentProductId) {
+    console.log(getCurrentProductId);
+    dispatch(fetchProductDetails(getCurrentProductId));
+  }
+
+  console.log("productDetails", productDetails);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] ">
       <ProductFilter filters={filters} handleFilter={handleFilter} />
@@ -124,7 +136,11 @@ function ShoppingListing() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4  p-4">
           {productList && productList.length > 0
             ? productList.map((prodItem, index) => (
-                <ShoppingProductTile key={index} product={prodItem} />
+                <ShoppingProductTile
+                  key={index}
+                  product={prodItem}
+                  handleGetProductDetails={handleGetProductDetails}
+                />
               ))
             : null}
         </div>
