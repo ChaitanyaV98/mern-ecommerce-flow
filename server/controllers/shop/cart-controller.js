@@ -62,7 +62,7 @@ export const fetchCartItems = async (req, res) => {
     }
     let cart = await Cart.findOne({ userId }).populate({
       path: "items.productId",
-      select: "image title price salePrice ",
+      select: "image title price salePrice",
     });
     if (!cart) {
       return res.status(404).json({
