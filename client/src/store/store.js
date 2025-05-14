@@ -3,6 +3,7 @@ import authSlice from "./auth-slice";
 import toastSlice from "./toast-slice";
 import adminProductsSlice from "./admin/productSlice";
 import shoppingProductSlice from "./shop/productSlice";
+import shoppingCartSlice from "./shop/cartSlice";
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     toast: toastSlice,
     adminProducts: adminProductsSlice,
     shopProducts: shoppingProductSlice,
+    shopCart: shoppingCartSlice,
   },
 });
 
