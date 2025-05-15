@@ -20,11 +20,22 @@ function UserCartItemsContent({ cartItem }) {
             <Minus className="w-4 h-4" />
             <span className="sr-only">Decrease</span>
           </Button>
+          <span className="font-semibold">{cartItem?.quantity}</span>
           <Button variant="outline" size="icon" className="h-8 w- rounded-full">
             <Plus className="w-4 h-4" />
             <span className="sr-only">Decrease</span>
           </Button>
         </div>
+      </div>
+      <div className="flex flex-col items-end">
+        <p className="font-semibold ">
+          $
+          {(
+            (cartItem.salePrice > 0 ? cartItem?.salePrice : cartItem?.price) *
+            cartItem.quantity
+          ).toFixed(2)}
+        </p>
+        <Trash className="cursor-pointer mt-1 " size={20} />
       </div>
     </div>
   );
