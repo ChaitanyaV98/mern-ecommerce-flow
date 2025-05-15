@@ -2,7 +2,11 @@ import { Card, CardContent, CardFooter } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 
-function ShoppingProductTile({ product, handleGetProductDetails }) {
+function ShoppingProductTile({
+  product,
+  handleGetProductDetails,
+  handleAddToCart,
+}) {
   return (
     <Card className="w-full max-w-sm mx-auto">
       <div onClick={() => handleGetProductDetails(product?._id)}>
@@ -54,6 +58,7 @@ function ShoppingProductTile({ product, handleGetProductDetails }) {
           <Button
             onClick={() => {
               // handleAddtoCart(product?._id, product?.totalStock)
+              handleAddToCart(product._id);
               console.log("Clicked on add to cart");
             }}
             className="w-full"

@@ -13,11 +13,13 @@ import {
   fetchAllFilteredProducts,
   fetchProductDetails,
 } from "@/store/shop/productSlice";
+import { addToShoppingCart } from "@/store/shop/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import ShoppingProductTile from "@/components/shopping-view/product-tile";
 import { useSearchParams } from "react-router-dom";
 import ProductDetailsDialog from "@/components/shopping-view/product-details";
+import { getShoppingCartItems } from "@/store/shop/cartSlice";
 
 function ShoppingListing() {
   const dispatch = useDispatch();
@@ -28,6 +30,8 @@ function ShoppingListing() {
   const { productList, productDetails } = useSelector(
     (state) => state.shopProducts
   );
+
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (filters !== null && sort !== null)
@@ -88,6 +92,38 @@ function ShoppingListing() {
     return queryParams.join("&");
   }
 
+  async function handleAddToCart(currentProductId) {
+    try {
+      console.log(currentProductId, "currentProductId");
+      console.log({
+        userId: user.id,
+        productId: currentProductId,
+        quantity: 1,
+      });
+      const resultAction = await dispatch(
+        addToShoppingCart({
+          userId: user.id,
+          productId: currentProductId,
+          quantity: 1,
+        })
+      );
+
+      console.log("Product added successfully:", resultAction.payload);
+      // Optional: handle result
+      if (resultAction.payload) {
+        await dispatch(getShoppingCartItems(user?.id));
+      }
+
+      if (resultAction.error) {
+        console.error("Failed to add product:", resultAction.error);
+      }
+    } catch (e) {
+      console.log("Error while adding prod", e);
+    }
+  }
+
+  // console.log("CART ITEMS---", cartItems);
+
   useEffect(() => {
     if (filters && Object.keys(filters).length > 0) {
       const createSearchQueryString = createSearchParamsHelper(filters);
@@ -95,14 +131,12 @@ function ShoppingListing() {
     }
   }, [filters]);
 
-  console.log("search params to string", searchParams.toString());
+  // console.log("search params to string", searchParams.toString());
 
   function handleGetProductDetails(getCurrentProductId) {
     console.log(getCurrentProductId);
     dispatch(fetchProductDetails(getCurrentProductId));
   }
-
-  console.log("productDetails", productDetails);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] ">
@@ -148,6 +182,7 @@ function ShoppingListing() {
                   key={index}
                   product={prodItem}
                   handleGetProductDetails={handleGetProductDetails}
+                  handleAddToCart={handleAddToCart}
                 />
               ))
             : null}

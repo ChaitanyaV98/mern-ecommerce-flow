@@ -14,9 +14,12 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { logoutUser } from "@/store/auth-slice";
+import UserCartWrapper from "./cart-wrapper";
+import { useState } from "react";
 
 function ShoppingHeader() {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.shopCart);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   function handleLogout() {
@@ -44,12 +47,29 @@ function ShoppingHeader() {
 
   function HeaderRightContent() {
     const { user } = useSelector((state) => state.auth);
+    const [openCartSheet, setOpenCartSheet] = useState(false);
     return (
       <div className="flex lg:items-center lg:flex-row flex-col gap-4">
-        <Button variant="outline" size="icon" className="relative">
-          <ShoppingCart className="h-6 w-6" />
-          <span className="sr-only">User Cart</span>
-        </Button>
+        <Sheet
+          open={openCartSheet}
+          onOpenChange={() => setOpenCartSheet(false)}
+        >
+          <Button
+            onClick={() => setOpenCartSheet(true)}
+            variant="outline"
+            size="icon"
+            className="relative"
+          >
+            <ShoppingCart className="h-6 w-6" />
+            <span className="sr-only">User Cart</span>
+          </Button>
+          <UserCartWrapper
+            cartItems={
+              cartItems && cartItems?.items?.length > 0 ? cartItems.items : []
+            }
+          />
+        </Sheet>
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Avatar className="bg-black">
