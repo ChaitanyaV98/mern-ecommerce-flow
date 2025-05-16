@@ -75,6 +75,17 @@ const shoppingCartSlice = createSlice({
       .addCase(updateShopCartQty.rejected, (state) => {
         state.isLoading = false;
         state.cartItems = [];
+      })
+      .addCase(deleteShopCartItem.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteShopCartItem.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.cartItems = action.payload.data;
+      })
+      .addCase(deleteShopCartItem.rejected, (state) => {
+        state.isLoading = false;
+        state.cartItems = [];
       });
   },
 });
