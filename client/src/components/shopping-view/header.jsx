@@ -14,8 +14,9 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { logoutUser } from "@/store/auth-slice";
+import { getShoppingCartItems } from "@/store/shop/cartSlice";
 import UserCartWrapper from "./cart-wrapper";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function ShoppingHeader() {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
@@ -28,7 +29,9 @@ function ShoppingHeader() {
 
   console.log("INheader --isAunthenticated", isAuthenticated);
 
-  console.log("user infoooo-----", user);
+  useEffect(() => {
+    dispatch(getShoppingCartItems(user?.id));
+  }, [dispatch]);
   function MenuItems() {
     return (
       <nav className="flex flex-col mb-3 lg:mb-0 lg:items-center gap-6 lg:flex-row">
