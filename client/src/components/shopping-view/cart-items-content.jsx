@@ -1,7 +1,24 @@
 import { Minus, Plus, Trash } from "lucide-react";
 import { Button } from "../ui/button";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteShopCartItem } from "@/store/shop/cartSlice";
 
 function UserCartItemsContent({ cartItem }) {
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  async function handleCartItemDelete(getCartItem) {
+    try {
+      await dispatch(
+        deleteShopCartItem({
+          userId: user?.id,
+          productId: getCartItem?.productId,
+        })
+      );
+    } catch (error) {
+      console.log("Error----->>>", error);
+    }
+  }
   return (
     <div className="flex items-center space-x-4">
       <img
@@ -35,7 +52,11 @@ function UserCartItemsContent({ cartItem }) {
             cartItem.quantity
           ).toFixed(2)}
         </p>
-        <Trash className="cursor-pointer mt-1 " size={20} />
+        <Trash
+          className="cursor-pointer mt-1 "
+          size={20}
+          onClick={() => handleCartItemDelete(cartItem)}
+        />
       </div>
     </div>
   );
