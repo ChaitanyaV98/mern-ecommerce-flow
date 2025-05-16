@@ -1,7 +1,7 @@
 import { Minus, Plus, Trash } from "lucide-react";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteShopCartItem } from "@/store/shop/cartSlice";
+import { deleteShopCartItem, updateShopCartQty } from "@/store/shop/cartSlice";
 
 function UserCartItemsContent({ cartItem }) {
   const { user } = useSelector((state) => state.auth);
@@ -19,6 +19,26 @@ function UserCartItemsContent({ cartItem }) {
       console.log("Error----->>>", error);
     }
   }
+  async function handleUpdateQuantity(cartItem, typeOfAction) {
+    try {
+      const data = await dispatch(
+        updateShopCartQty({
+          userId: user?.id,
+          productId: cartItem?.productId,
+          quantity:
+            typeOfAction === "plus"
+              ? cartItem?.quantity + 1
+              : cartItem?.quantity - 1,
+        })
+      );
+      if (data?.payload?.success) {
+        console.log("Data updated successfully ");
+      }
+    } catch (error) {
+      console.log("Error while updating", error);
+    }
+  }
+
   return (
     <div className="flex items-center space-x-4">
       <img
@@ -33,12 +53,19 @@ function UserCartItemsContent({ cartItem }) {
             variant="outline"
             size="icon"
             className="h-8 w-8 rounded-full"
+            onClick={() => handleUpdateQuantity(cartItem, "minus")}
+            disabled={cartItem?.quantity === 1} //when quantity is 1 this button is disabled
           >
             <Minus className="w-4 h-4" />
             <span className="sr-only">Decrease</span>
           </Button>
           <span className="font-semibold">{cartItem?.quantity}</span>
-          <Button variant="outline" size="icon" className="h-8 w- rounded-full">
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w- rounded-full"
+            onClick={() => handleUpdateQuantity(cartItem, "plus")}
+          >
             <Plus className="w-4 h-4" />
             <span className="sr-only">Decrease</span>
           </Button>
