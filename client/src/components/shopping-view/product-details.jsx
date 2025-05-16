@@ -4,8 +4,38 @@ import { Separator } from "../ui/separator";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { StarIcon } from "lucide-react";
 import { Input } from "../ui/input";
+import { useDispatch, useSelector } from "react-redux";
+import { addToShoppingCart } from "@/store/shop/cartSlice";
+import { getShoppingCartItems } from "@/store/shop/cartSlice";
 
 function ProductDetailsDialog({ open, setOpen, productDetails }) {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  async function handleAddToCart(currentProductId) {
+    try {
+      console.log(currentProductId, "currentProductId");
+
+      const resultAction = await dispatch(
+        addToShoppingCart({
+          userId: user.id,
+          productId: currentProductId,
+          quantity: 1,
+        })
+      );
+
+      console.log("Product added successfully:", resultAction.payload);
+      // Optional: handle result
+      if (resultAction.payload) {
+        await dispatch(getShoppingCartItems(user?.id));
+      }
+
+      if (resultAction.error) {
+        console.error("Failed to add product:", resultAction.error);
+      }
+    } catch (e) {
+      console.log("Error while adding prod", e);
+    }
+  }
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="grid grid-cols-2 gap-8 sm:p-12 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw]">
@@ -50,7 +80,12 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
             <span className="text-muted-foreground">(4.5)</span>
           </div>
           <div className="mt-5 mb-5">
-            <Button className="w-full outline-none">Add to Cart</Button>
+            <Button
+              onClick={() => handleAddToCart(productDetails?._id)}
+              className="w-full outline-none"
+            >
+              Add to Cart
+            </Button>
           </div>
           <Separator />
 
