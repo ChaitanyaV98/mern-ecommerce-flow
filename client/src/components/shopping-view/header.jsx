@@ -17,18 +17,35 @@ import { logoutUser } from "@/store/auth-slice";
 import { getShoppingCartItems } from "@/store/shop/cartSlice";
 import UserCartWrapper from "./cart-wrapper";
 import { useState, useEffect } from "react";
+import { Label } from "../ui/label";
 
 function MenuItems() {
+  const navigate = useNavigate();
+  function handleNavigate(currentMenuItem) {
+    sessionStorage.removeItem("filters");
+    const currentFilter =
+      currentMenuItem.id !== "home"
+        ? {
+            category: [currentMenuItem.id],
+          }
+        : null;
+    sessionStorage.setItem("filters", JSON.stringify(currentFilter));
+    navigate(currentMenuItem.path);
+  }
   return (
     <nav className="flex flex-col mb-3 lg:mb-0 lg:items-center gap-6 lg:flex-row">
       {shoppingViewHeaderMenuItems.map((menuItem) => (
-        <Link
-          className="text-sm font-medium"
+        <Label
+          className="text-sm font-medium cursor-pointer "
           key={menuItem.id}
           to={menuItem.path}
+          onClick={() => {
+            console.log("CLICKED ON MENU ITEM", menuItem.label);
+            handleNavigate(menuItem);
+          }}
         >
           {menuItem.label}
-        </Link>
+        </Label>
       ))}
     </nav>
   );
@@ -48,6 +65,7 @@ function HeaderRightContent() {
 
   const { user } = useSelector((state) => state.auth);
   const [openCartSheet, setOpenCartSheet] = useState(false);
+
   return (
     <div className="flex lg:items-center lg:flex-row flex-col gap-4">
       <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
