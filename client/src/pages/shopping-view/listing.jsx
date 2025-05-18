@@ -20,9 +20,11 @@ import ShoppingProductTile from "@/components/shopping-view/product-tile";
 import { useSearchParams } from "react-router-dom";
 import ProductDetailsDialog from "@/components/shopping-view/product-details";
 import { getShoppingCartItems } from "@/store/shop/cartSlice";
+import { useLocation } from "react-router-dom";
 
 function ShoppingListing() {
   const dispatch = useDispatch();
+  const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
@@ -65,10 +67,15 @@ function ShoppingListing() {
     sessionStorage.setItem("filters", JSON.stringify(updatedFilters));
   };
 
+  // useEffect(() => {
+  //   setSort("price-lowtohigh");
+  //   setFilters(JSON.parse(sessionStorage.getItem("filters")) || {});
+  // }, [location]);
   useEffect(() => {
+    const sessionFilters = JSON.parse(sessionStorage.getItem("filters")) || {};
+    setFilters(sessionFilters);
     setSort("price-lowtohigh");
-    setFilters(JSON.parse(sessionStorage.getItem("filters")) || {});
-  }, []);
+  }, [location.search]);
 
   useEffect(() => {
     if (productDetails !== null) {

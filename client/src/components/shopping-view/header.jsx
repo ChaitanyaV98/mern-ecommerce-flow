@@ -23,26 +23,31 @@ function MenuItems() {
   const navigate = useNavigate();
   function handleNavigate(currentMenuItem) {
     sessionStorage.removeItem("filters");
+
     const currentFilter =
       currentMenuItem.id !== "home"
         ? {
             category: [currentMenuItem.id],
           }
         : null;
-    sessionStorage.setItem("filters", JSON.stringify(currentFilter));
-    navigate(currentMenuItem.path);
+
+    if (currentFilter) {
+      sessionStorage.setItem("filters", JSON.stringify(currentFilter));
+      const searchParams = new URLSearchParams({
+        category: currentMenuItem.id,
+      });
+      navigate(`${currentMenuItem.path}?${searchParams.toString()}`);
+    } else {
+      navigate(currentMenuItem.path);
+    }
   }
   return (
     <nav className="flex flex-col mb-3 lg:mb-0 lg:items-center gap-6 lg:flex-row">
       {shoppingViewHeaderMenuItems.map((menuItem) => (
         <Label
-          className="text-sm font-medium cursor-pointer "
+          onClick={() => handleNavigate(menuItem)}
+          className="text-sm font-medium cursor-pointer"
           key={menuItem.id}
-          to={menuItem.path}
-          onClick={() => {
-            console.log("CLICKED ON MENU ITEM", menuItem.label);
-            handleNavigate(menuItem);
-          }}
         >
           {menuItem.label}
         </Label>
