@@ -23,7 +23,7 @@ import { getShoppingCartItems } from "@/store/shop/cartSlice";
 
 function ShoppingListing() {
   const dispatch = useDispatch();
-  const [setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
