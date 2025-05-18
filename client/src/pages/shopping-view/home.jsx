@@ -23,11 +23,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAllFilteredProducts } from "@/store/shop/productSlice";
 import ShoppingProductTile from "@/components/shopping-view/product-tile";
 import { useNavigate } from "react-router-dom";
+import {
+  addToShoppingCart,
+  getShoppingCartItems,
+} from "@/store/shop/cartSlice";
+import ProductDetailsDialog from "@/components/shopping-view/product-details";
+import { fetchProductDetails } from "@/store/shop/productSlice";
 
 function ShoppingHome() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { productList } = useSelector((state) => state.shopProducts);
+  const { user } = useSelector((state) => state.auth);
+  const { productList, productDetails } = useSelector(
+    (state) => state.shopProducts
+  );
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
   const slides = [bannerOne, bannerTwo, bannerThree];
   const categories = [
     { id: "men", label: "Men", icon: ShirtIcon },
@@ -66,6 +76,12 @@ function ShoppingHome() {
     );
   }, [dispatch]);
 
+  useEffect(() => {
+    if (productDetails !== null) {
+      setOpenDetailsDialog(true);
+    }
+  }, [productDetails]);
+
   console.log("Shop products----", productList);
 
   function handleNavigateToListingPage(currentItem, section) {
@@ -73,6 +89,41 @@ function ShoppingHome() {
     const currentFilter = { [section]: [currentItem.id] };
     sessionStorage.setItem("filters", JSON.stringify(currentFilter));
     navigate(`/shop/listing`);
+  }
+
+  async function handleAddToCart(currentProductId) {
+    try {
+      console.log(currentProductId, "currentProductId");
+      console.log({
+        userId: user.id,
+        productId: currentProductId,
+        quantity: 1,
+      });
+      const resultAction = await dispatch(
+        addToShoppingCart({
+          userId: user.id,
+          productId: currentProductId,
+          quantity: 1,
+        })
+      );
+
+      console.log("Product added successfully:", resultAction.payload);
+      // Optional: handle result
+      if (resultAction.payload) {
+        await dispatch(getShoppingCartItems(user?.id));
+      }
+
+      if (resultAction.error) {
+        console.error("Failed to add product:", resultAction.error);
+      }
+    } catch (e) {
+      console.log("Error while adding prod", e);
+    }
+  }
+
+  function handleGetProductDetails(getCurrentProductId) {
+    console.log(getCurrentProductId);
+    dispatch(fetchProductDetails(getCurrentProductId));
   }
 
   return (
@@ -164,12 +215,22 @@ function ShoppingHome() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {productList && productList.length > 0
               ? productList.map((productitem, index) => (
-                  <ShoppingProductTile product={productitem} key={index} />
+                  <ShoppingProductTile
+                    product={productitem}
+                    key={index}
+                    handleAddToCart={handleAddToCart}
+                    handleGetProductDetails={handleGetProductDetails}
+                  />
                 ))
               : null}
           </div>
         </div>
       </section>
+      <ProductDetailsDialog
+        open={openDetailsDialog}
+        setOpen={setOpenDetailsDialog}
+        productDetails={productDetails}
+      />
     </div>
   );
 }
