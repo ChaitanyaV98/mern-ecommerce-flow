@@ -1,10 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {
-  addAddress,
-  fetchAddressList,
-  editAddress,
-  deleteAddress,
-} from "@/services/shop/address/addAddress";
+// import {
+//   addAddress,
+//   fetchAddressList,
+//   editAddress,
+//   deleteAddress,
+// } from "@/services/shop/address";
+import { addAddress } from "@/services/shop/address/addAddress";
+import { fetchAddressList } from "@/services/shop/address/fetchAddressList";
+import { editAddress } from "@/services/shop/address/editAddress";
+import { deleteAddress } from "@/services/shop/address/deleteAddress";
 
 const initialState = {
   isLoading: false,
