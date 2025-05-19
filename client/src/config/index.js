@@ -241,3 +241,10 @@ export const addressFormControls = [
     placeholder: "Enter any additional notes",
   },
 ];
+export const initialAddressFormData = {
+  address: "",
+  city: "",
+  phone: "",
+  pincode: "",
+  notes: "",
+};

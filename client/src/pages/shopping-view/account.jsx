@@ -20,10 +20,10 @@ function ShoppingAccount() {
               <TabsTrigger value="address">Address</TabsTrigger>
             </TabsList>
             <TabsContent value="orders">
-              <Address />
+              <Orders />
             </TabsContent>
             <TabsContent value="address">
-              <Orders />
+              <Address />
             </TabsContent>
           </Tabs>
         </div>
