@@ -6,6 +6,7 @@ export const editAddress = async ({ userId, addressId, formData }) => {
       `http://localhost:3000/api/shop/address/update/${userId}/${addressId}`,
       formData
     );
+    console.log("Update responseeee---", response);
     return response.data;
   } catch (error) {
     console.error("Error editing address:", error);

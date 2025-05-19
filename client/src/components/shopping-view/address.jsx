@@ -13,32 +13,77 @@ import {
   addNewAddress,
   deleteUserAddress,
   fetchAllAddressList,
+  updateAddress,
 } from "@/store/shop/addressSlice";
 import AddressCard from "./address-card";
 
 function Address() {
   const [formData, setFormData] = useState(initialAddressFormData);
+  const [currentEditedId, setCurrentEditedId] = useState(null);
   const dispatch = useDispatch();
 
   const { user } = useSelector((state) => state.auth);
   const { addressList } = useSelector((state) => state.shopAddress);
 
+  //   async function handleManageAddress(event) {
+  //     event.preventDefault();
+  //     try {
+  //       const response =
+  //         currentEditedId !== null
+  //           ? await dispatch(
+  //               updateAddress({
+  //                 userId: user?.id,
+  //                 addressId: currentEditedId,
+  //                 formData,
+  //               })
+  //             )
+  //           : await dispatch(
+  //               addNewAddress({
+  //                 ...formData,
+  //                 userId: user?.id,
+  //               })
+  //             );
+
+  //       if (response?.payload?.success) {
+  //         await dispatch(fetchAllAddressList(user?.id));
+  //         setCurrentEditedId(null);
+  //         setFormData(initialAddressFormData);
+  //       }
+  //     } catch (e) {
+  //       console.log("Error---", e);
+  //     }
+  //   }
   async function handleManageAddress(event) {
     event.preventDefault();
     try {
-      const response = await dispatch(
-        addNewAddress({
-          ...formData,
-          userId: user?.id,
-        })
-      );
-      console.log("RESPONSE ----", response);
+      let response;
+
+      if (currentEditedId !== null) {
+        response = await dispatch(
+          updateAddress({
+            userId: user?.id,
+            addressId: currentEditedId,
+            formData,
+          })
+        );
+      } else {
+        response = await dispatch(
+          addNewAddress({
+            ...formData,
+            userId: user?.id,
+          })
+        );
+      }
+
       if (response?.payload?.success) {
         await dispatch(fetchAllAddressList(user?.id));
+        setCurrentEditedId(null);
         setFormData(initialAddressFormData);
+      } else {
+        console.error("Address operation failed:", response);
       }
     } catch (e) {
-      console.log("Error---", e);
+      console.error("Error managing address:", e);
     }
   }
 
@@ -79,6 +124,15 @@ function Address() {
 
   function handleEditAddress(currentAddress) {
     console.log("Current address in Edit", currentAddress);
+    setCurrentEditedId(currentAddress?._id);
+    setFormData({
+      ...formData,
+      address: currentAddress?.address,
+      city: currentAddress?.city,
+      phone: currentAddress?.phone,
+      pincode: currentAddress?.pincode,
+      notes: currentAddress?.notes,
+    });
   }
   return (
     <Card>
@@ -95,14 +149,16 @@ function Address() {
           : null}
       </div>
       <CardHeader>
-        <CardTitle>Add New Address</CardTitle>
+        <CardTitle>
+          {currentEditedId !== null ? "Edit Address" : "Add New Address"}
+        </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
         <CommonForm
           formControls={addressFormControls}
           formData={formData}
           setFormData={setFormData}
-          buttonText="Add"
+          buttonText={currentEditedId !== null ? "edit" : "Add"}
           onSubmit={handleManageAddress}
           isBtnDisabled={!isFormValid()}
         />
