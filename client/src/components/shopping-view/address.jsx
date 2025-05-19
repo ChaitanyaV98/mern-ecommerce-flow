@@ -4,6 +4,7 @@ import { initialAddressFormData, addressFormControls } from "@/config";
 import CommonForm from "../common/form";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewAddress, fetchAllAddressList } from "@/store/shop/addressSlice";
+import AddressCard from "./address-card";
 
 function Address() {
   const [formData, setFormData] = useState(initialAddressFormData);
@@ -50,7 +51,13 @@ function Address() {
   console.log("ADDRESS LIST ----", addressList);
   return (
     <Card>
-      <div>Address List</div>
+      <div className="mb-5  p-3  grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 gap-2">
+        {addressList && addressList.length > 0
+          ? addressList.map((addressItem, index) => (
+              <AddressCard key={index} addressInfo={addressItem} />
+            ))
+          : null}
+      </div>
       <CardHeader>
         <CardTitle>Add New Address</CardTitle>
       </CardHeader>
