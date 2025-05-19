@@ -55,6 +55,13 @@ function Address() {
   //   }
   async function handleManageAddress(event) {
     event.preventDefault();
+    // Prevent user from adding more than 3 addresses
+    if (currentEditedId === null && addressList.length >= 3) {
+      alert("You can only add up to 3 addresses.");
+      setFormData(initialAddressFormData);
+      return;
+    }
+
     try {
       let response;
 
