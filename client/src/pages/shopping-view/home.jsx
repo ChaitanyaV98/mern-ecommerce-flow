@@ -82,7 +82,7 @@ function ShoppingHome() {
     }
   }, [productDetails]);
 
-  console.log("Shop products----", productList);
+  // console.log("Shop products----", productList);
 
   function handleNavigateToListingPage(currentItem, section) {
     sessionStorage.removeItem("filters");
