@@ -8,8 +8,12 @@ import {
   TableCell,
 } from "../ui/table";
 import { Button } from "../ui/button";
+import { useState } from "react";
+import ShoppingOrderDetailsView from "@/components/shopping-view/order-details";
+import { Dialog } from "../ui/dialog";
 
-function ShoopingOrders() {
+function ShoppingOrders() {
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
   return (
     <Card>
       <CardHeader>
@@ -37,7 +41,15 @@ function ShoopingOrders() {
               <TableCell>$1000</TableCell>
 
               <TableCell>
-                <Button>View Details</Button>
+                <Dialog
+                  open={openDetailsDialog}
+                  onOpenChange={setOpenDetailsDialog}
+                >
+                  <Button onClick={() => setOpenDetailsDialog(true)}>
+                    View Details
+                  </Button>
+                  <ShoppingOrderDetailsView />
+                </Dialog>
               </TableCell>
             </TableRow>
           </TableBody>
@@ -47,4 +59,4 @@ function ShoopingOrders() {
   );
 }
 
-export default ShoopingOrders;
+export default ShoppingOrders;
