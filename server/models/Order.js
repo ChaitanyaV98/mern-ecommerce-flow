@@ -9,7 +9,7 @@ const OrderSchema = new mongoose.Schema(
         title: String,
         image: String,
         price: String,
-        salePrice: String,
+        // salePrice: String,//will handle via frontend and pass only price
         quantity: Number,
       },
     ],
