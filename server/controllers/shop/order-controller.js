@@ -3,7 +3,6 @@ import Order from "../../models/Order";
 
 export const createOrder = async (req, res) => {
   try {
-    //In this method we are going to save the order in db
     const {
       userId,
       cartItems,
@@ -14,39 +13,9 @@ export const createOrder = async (req, res) => {
       totalAmount,
       orderDate,
       orderUpdateDate,
-      paymentId,
-      payerId,
-      cartId,
     } = req.body;
 
-    // const create_payment_json = {
-    //   intent: "sale",
-    //   payer: {
-    //     payment_method: "paypal",
-    //   },
-    //   redirect_urls: {
-    //     return_url: "http://localhost:5173/shop/paypal-return",
-    //     cancel_url: "http://localhost:5173/shop/paypal-cancel",
-    //   },
-    //   transactions: [
-    //     {
-    //       items_list: {
-    //         items: cartItems.map((item) => ({
-    //           name: item.title,
-    //           sku: item.productId,
-    //           price: item.price.toFixed(2),
-    //           currency: "USD",
-    //           quantity: item.quantity,
-    //         })),
-    //       },
-    //       amount: {
-    //         currency: "USD",
-    //         total: totalAmount.toFixed(2),
-    //       },
-    //       description: "description",
-    //     },
-    //   ],
-    // };
+    // 1. Create PayPal Order
     const request = new paypal.orders.OrdersCreateRequest();
     request.prefer("return=representation");
     request.requestBody({
@@ -78,13 +47,13 @@ export const createOrder = async (req, res) => {
         cancel_url: "http://localhost:5173/shop/paypal-cancel",
       },
     });
+
     const response = await paypalClient().execute(request);
     const approvalUrl = response.result.links.find(
       (link) => link.rel === "approve"
     ).href;
 
-    // Save order to DB here (optional)
-    // Save order to MongoDB
+    // 2. Save order to DB with paymentId as PayPal order ID
     const newOrder = new Order({
       userId,
       cartItems,
@@ -95,8 +64,8 @@ export const createOrder = async (req, res) => {
       totalAmount,
       orderDate: orderDate || new Date(),
       orderUpdateDate: orderUpdateDate || new Date(),
-      paymentId: paypalOrderId,
-      payerId: "", // Will be updated later on capture
+      paymentId: response.result.id,
+      payerId: "",
     });
 
     await newOrder.save();
@@ -107,22 +76,75 @@ export const createOrder = async (req, res) => {
       orderId: response.result.id,
     });
   } catch (e) {
-    console.log("Some error occured");
+    console.error("PayPal Order Create Error:", e);
     res.status(500).json({
       success: false,
       message: "Something went wrong! Please try again",
     });
   }
 };
-
 export const capturePayment = async (req, res) => {
   try {
-    //In this method we are going to check if the order is successful or not via paypal
+    const { paypalOrderId } = req.body;
+
+    if (!paypalOrderId) {
+      return res.status(400).json({
+        success: false,
+        message: "PayPal Order ID is required",
+      });
+    }
+
+    // Capture the payment using the PayPal SDK
+    const request = new paypal.orders.OrdersCaptureRequest(paypalOrderId);
+    request.requestBody({});
+
+    const response = await paypalClient().execute(request);
+
+    const captureResult = response.result;
+    const status = captureResult.status;
+    const payerId = captureResult.payer?.payer_id;
+    const paymentId = captureResult.id;
+
+    if (status !== "COMPLETED") {
+      return res.status(400).json({
+        success: false,
+        message: "Payment not completed",
+        status,
+      });
+    }
+
+    // Update the order in your DB with payment info
+    const updatedOrder = await Order.findOneAndUpdate(
+      { paymentId: paypalOrderId },
+      {
+        $set: {
+          paymentStatus: "paid",
+          payerId: payerId,
+          orderStatus: "confirmed",
+          orderUpdateDate: new Date(),
+        },
+      },
+      { new: true }
+    );
+
+    if (!updatedOrder) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found in DB",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Payment captured successfully",
+      updatedOrder,
+      paypalCapture: captureResult,
+    });
   } catch (e) {
-    console.log("Some error occured");
+    console.error("PayPal Payment Capture Error:", e);
     res.status(500).json({
       success: false,
-      message: "Something went wrong! Please try again",
+      message: "Something went wrong while capturing the payment",
     });
   }
 };
