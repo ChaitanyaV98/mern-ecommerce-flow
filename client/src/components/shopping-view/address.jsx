@@ -17,7 +17,7 @@ import {
 } from "@/store/shop/addressSlice";
 import AddressCard from "./address-card";
 
-function Address() {
+function Address({ setCurrentSelectedAddress }) {
   const [formData, setFormData] = useState(initialAddressFormData);
   const [currentEditedId, setCurrentEditedId] = useState(null);
   const dispatch = useDispatch();
@@ -151,6 +151,7 @@ function Address() {
                 addressInfo={addressItem}
                 handleDeleteAddress={handleDeleteAddress}
                 handleEditAddress={handleEditAddress}
+                setCurrentSelectedAddress={setCurrentSelectedAddress}
               />
             ))
           : null}
