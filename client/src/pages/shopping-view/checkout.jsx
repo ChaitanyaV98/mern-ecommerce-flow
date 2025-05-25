@@ -1,14 +1,16 @@
 import Address from "@/components/shopping-view/address";
 import img from "../../assets/account.jpg";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import UserCartItemsContent from "@/components/shopping-view/cart-items-content";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { createNewOrder } from "@/store/order-slice";
 
 function ShoppingCheckout() {
   const { cartItems } = useSelector((state) => state.shopCart);
   const { user } = useSelector((state) => state.auth);
   const [currentSelectedAddress, setCurrentSelectedAddress] = useState(null);
+  const dispatch = useDispatch();
 
   const totalCartAmount =
     cartItems && cartItems.items && cartItems.items.length > 0
@@ -23,33 +25,41 @@ function ShoppingCheckout() {
         )
       : 0;
 
-  function handleInitiatePaypalPayment() {
-    const orderData = {
-      userId: user?.id,
-      cartItems: cartItems.items.map((singleCart) => ({
-        productId: singleCart?.productId,
-        title: singleCart?.title,
-        image: singleCart?.image,
-        price:
-          singleCart?.salePrice > 0 ? singleCart?.salePrice : singleCart?.price,
-        quantity: singleCart?.quantity,
-      })),
-      addressInfo: {
-        addressId: currentSelectedAddress?._id,
-        address: currentSelectedAddress?.address,
-        city: currentSelectedAddress?.city,
-        pincode: currentSelectedAddress?.pincode,
-        phone: currentSelectedAddress?.phone,
-        notes: currentSelectedAddress?.notes,
-      },
-      orderStatus: "pending",
-      paymentMethod: "paypal",
-      paymentStatus: "pending",
-      totalAmount: totalCartAmount,
-      orderDate: new Date(),
-      orderUpdateDate: new Date(),
-    };
-    console.log("ORDER DATA----", orderData);
+  async function handleInitiatePaypalPayment() {
+    try {
+      const orderData = {
+        userId: user?.id,
+        cartItems: cartItems.items.map((singleCart) => ({
+          productId: singleCart?.productId,
+          title: singleCart?.title,
+          image: singleCart?.image,
+          price:
+            singleCart?.salePrice > 0
+              ? singleCart?.salePrice
+              : singleCart?.price,
+          quantity: singleCart?.quantity,
+        })),
+        addressInfo: {
+          addressId: currentSelectedAddress?._id,
+          address: currentSelectedAddress?.address,
+          city: currentSelectedAddress?.city,
+          pincode: currentSelectedAddress?.pincode,
+          phone: currentSelectedAddress?.phone,
+          notes: currentSelectedAddress?.notes,
+        },
+        orderStatus: "pending",
+        paymentMethod: "paypal",
+        paymentStatus: "pending",
+        totalAmount: totalCartAmount,
+        orderDate: new Date(),
+        orderUpdateDate: new Date(),
+      };
+      console.log("ORDER DATA----", orderData);
+      const orderResponse = await dispatch(createNewOrder(orderData));
+      console.log("CREATE ORDER RESP---", orderResponse);
+    } catch (e) {
+      console.log("Error while create order handle", e);
+    }
   }
 
   return (

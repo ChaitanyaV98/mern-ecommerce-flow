@@ -3,7 +3,7 @@ import axios from "axios";
 export const createOrder = async (orderData) => {
   try {
     const response = await axios.post(
-      "http://localhost:3000/api/shop/order/create ",
+      "http://localhost:3000/api/shop/order/create-order ",
       orderData
     );
     return response.data;
