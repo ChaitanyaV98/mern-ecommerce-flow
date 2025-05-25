@@ -1,5 +1,5 @@
-import { paypal, paypalClient } from "../../helpers/paypal";
-import Order from "../../models/Order";
+import { paypal, paypalClient } from "../../helpers/paypal.js";
+import Order from "../../models/Order.js";
 
 export const createOrder = async (req, res) => {
   try {

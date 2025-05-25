@@ -6,6 +6,24 @@ import { Button } from "@/components/ui/button";
 
 function ShoppingCheckout() {
   const { cartItems } = useSelector((state) => state.shopCart);
+  const { user } = useSelector((state) => state.auth);
+  console.log("CART ITEMS*****", cartItems);
+  console.log("User Details----", user);
+
+  function handleInitiatePaypalPayment() {
+    // const orderData = {
+    //   userId: user?.id,
+    //   cartItems,
+    //   addressInfo,
+    //   orderStatus,
+    //   paymentMethod,
+    //   paymentStatus,
+    //   totalAmount,
+    //   orderDate,
+    //   orderUpdateDate,
+    // };
+  }
+
   const totalCartAmount =
     cartItems && cartItems.items && cartItems.items.length > 0
       ? cartItems.items.reduce(
@@ -38,7 +56,9 @@ function ShoppingCheckout() {
             </div>
           </div>
           <div className="mt-4  ">
-            <Button className=" w-full ">Checkout with paypal</Button>
+            <Button onClick={handleInitiatePaypalPayment} className=" w-full ">
+              Checkout with paypal
+            </Button>
           </div>
         </div>
       </div>

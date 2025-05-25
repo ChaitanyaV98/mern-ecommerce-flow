@@ -1,7 +1,8 @@
+import express from "express";
 import {
   createOrder,
   capturePayment,
-} from "../../controllers/shop/order-controller";
+} from "../../controllers/shop/order-controller.js";
 
 const orderRouter = express.Router();
 
