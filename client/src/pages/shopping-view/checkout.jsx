@@ -9,7 +9,9 @@ import { createNewOrder } from "@/store/order-slice";
 function ShoppingCheckout() {
   const { cartItems } = useSelector((state) => state.shopCart);
   const { user } = useSelector((state) => state.auth);
+  const { approvalURL } = useSelector((state) => state.shopOrder);
   const [currentSelectedAddress, setCurrentSelectedAddress] = useState(null);
+  const [isPaymentStarted, setIsPaymentStarted] = useState(false);
   const dispatch = useDispatch();
 
   const totalCartAmount =
@@ -54,9 +56,15 @@ function ShoppingCheckout() {
         orderDate: new Date(),
         orderUpdateDate: new Date(),
       };
-      console.log("ORDER DATA----", orderData);
-      const orderResponse = await dispatch(createNewOrder(orderData));
-      console.log("CREATE ORDER RESP---", orderResponse);
+
+      const createOrderResponse = await dispatch(createNewOrder(orderData));
+
+      if (createOrderResponse?.payload?.success) {
+        setIsPaymentStarted(true);
+      }
+      if (approvalURL) {
+        window.location.href = approvalURL;
+      }
     } catch (e) {
       console.log("Error while create order handle", e);
     }
