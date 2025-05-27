@@ -166,6 +166,7 @@ export const createOrder = async (req, res) => {
       totalAmount,
       orderDate,
       orderUpdateDate,
+      cartId,
     } = req.body;
 
     // ✅ Validate input
@@ -225,6 +226,7 @@ export const createOrder = async (req, res) => {
     // 🧾 Save order to DB
     const newOrder = new Order({
       userId,
+      cartId,
       cartItems,
       addressInfo,
       orderStatus: orderStatus || "pending",
