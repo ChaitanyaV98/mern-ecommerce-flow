@@ -69,6 +69,7 @@ function HeaderRightContent() {
   }, [dispatch]);
 
   const { user } = useSelector((state) => state.auth);
+  console.log("USER DETAILS---->", user);
   const [openCartSheet, setOpenCartSheet] = useState(false);
 
   return (
@@ -101,7 +102,9 @@ function HeaderRightContent() {
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent side="right" className="w-56">
-          <DropdownMenuLabel>Logged in as {user.username}</DropdownMenuLabel>
+          <DropdownMenuLabel>
+            Logged in as {user?.username || "Guest"}
+          </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => navigate("/shop/account")}>
             <UserCog className="mr-2 h-4 w-4" />
