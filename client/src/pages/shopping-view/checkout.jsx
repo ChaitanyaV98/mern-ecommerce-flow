@@ -60,6 +60,7 @@ function ShoppingCheckout() {
       const createOrderResponse = await dispatch(createNewOrder(orderData));
 
       if (createOrderResponse?.payload?.success) {
+        sessionStorage.setItem("user", JSON.stringify(user));
         setIsPaymentStarted(true);
       }
       if (approvalURL) {
