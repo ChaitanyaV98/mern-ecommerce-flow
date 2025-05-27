@@ -258,16 +258,16 @@ export const createOrder = async (req, res) => {
 // CAPTURE PAYMENT - PayPal
 export const capturePayment = async (req, res) => {
   try {
-    const { paypalOrderId } = req.body;
+    const { token, payerID } = req.body;
 
-    if (!paypalOrderId) {
+    if (!token || !payerID) {
       return res.status(400).json({
         success: false,
-        message: "PayPal Order ID is required",
+        message: "Missing PayPal token or PayerID",
       });
     }
 
-    const request = new paypal.OrdersCaptureRequest(paypalOrderId);
+    const request = new paypal.OrdersCaptureRequest(token);
     request.requestBody({});
 
     const response = await paypalClient().execute(request);
@@ -287,16 +287,17 @@ export const capturePayment = async (req, res) => {
       });
     }
 
-    // 🛠️ Update order
+    // 🛠️ Update the order in DB using PayPal order ID (which was saved earlier as `paypalOrderId`)
     const updatedOrder = await Order.findOneAndUpdate(
-      { paymentId: paypalOrderId },
+      { paypalOrderId: token }, // token === PayPal order ID
       {
         $set: {
           paymentStatus: "paid",
           payerId: payerId,
           orderStatus: "confirmed",
           orderUpdateDate: new Date(),
-          captureId: captureId, // Optional: add to schema if you want to track
+          captureId: captureId,
+          paymentId: paymentId,
         },
       },
       { new: true }
