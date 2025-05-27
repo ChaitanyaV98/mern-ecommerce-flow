@@ -88,7 +88,10 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setUser: (state, action) => {},
+    setUserAuthenticated: (state, action) => {
+      state.user = action.payload.user;
+      state.isAuthenticated = true;
+    },
   },
   //when we are getting data back from extra reducers thunk then we need to store the data on my store
   extraReducers: (builder) => {
@@ -113,6 +116,10 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.user = action.payload.success ? action.payload.user : null;
         state.isAuthenticated = action.payload.success;
+        if (action.payload.token) {
+          sessionStorage.setItem("token", action.payload.token); // save token
+          sessionStorage.setItem("user", JSON.stringify(action.payload.user)); // save user too
+        }
       })
       .addCase(loginUser.rejected, (state) => {
         state.isLoading = false;
@@ -140,5 +147,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { setUser } = authSlice.actions;
+// export const { setUser } = authSlice.actions;
+export const { setUserAuthenticated } = authSlice.actions;
 export default authSlice.reducer;
