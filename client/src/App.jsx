@@ -21,6 +21,7 @@ import ToastComponent from "./components/common/toast-message";
 import NotFound from "./pages/not-found";
 import { useEffect } from "react";
 import { checkAuth } from "./store/auth-slice";
+import PaypalReturnPage from "./pages/shopping-view/paypal-return";
 
 function App() {
   // const isaAuthenticated = true;
@@ -76,6 +77,7 @@ function App() {
           <Route path="listing" element={<ShoppingListing />} />
           <Route path="checkout" element={<ShoppingCheckout />} />
           <Route path="account" element={<ShoppingAccount />} />
+          <Route path="paypal-return" element={<PaypalReturnPage />} />
         </Route>
         <Route path="/unauth-page" element={<UnauthPage />} />
         <Route path="*" element={<NotFound />} />
