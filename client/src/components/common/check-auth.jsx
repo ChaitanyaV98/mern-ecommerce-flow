@@ -1,9 +1,31 @@
 import { Navigate, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setUserAuthenticated } from "@/store/auth-slice";
 
 function CheckAuth({ isAuthenticated, user, children }) {
   const location = useLocation();
-  console.log(location.pathname, "location.pathname");
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const storedUser = sessionStorage.getItem("user");
 
+    console.log("STORED USER--", storedUser);
+    if (storedUser) {
+      dispatch(
+        setUserAuthenticated({
+          user: JSON.parse(storedUser),
+        })
+      );
+    }
+
+    sessionStorage.removeItem("token");
+  }, []);
+  // console.log(location.pathname, "location.pathname");
+  console.log("Is authenticated", isAuthenticated);
+
+  if (location.pathname === "/shop/paypal-return") {
+    return <>{children}</>;
+  }
   //if the user is not authenticated and trying to access any other page other than login and regiter the
   if (
     !isAuthenticated &&
