@@ -31,7 +31,7 @@ function ShoppingCheckout() {
     try {
       const orderData = {
         userId: user?.id,
-        cartId: cartItems?.id,
+        cartId: cartItems?._id,
         cartItems: cartItems.items.map((singleCart) => ({
           productId: singleCart?.productId,
           title: singleCart?.title,
@@ -62,10 +62,16 @@ function ShoppingCheckout() {
 
       if (createOrderResponse?.payload?.success) {
         sessionStorage.setItem("user", JSON.stringify(user));
+        sessionStorage.setItem(
+          "currentOrderId",
+          JSON.stringify(createOrderResponse.payload.mongoOrderId)
+        );
         setIsPaymentStarted(true);
-      }
-      if (approvalURL) {
-        window.location.href = approvalURL;
+
+        const approvalUrl = createOrderResponse.payload.approvalURL;
+        if (approvalUrl) {
+          window.location.href = approvalUrl;
+        }
       }
     } catch (e) {
       console.log("Error while create order handle", e);
@@ -92,8 +98,12 @@ function ShoppingCheckout() {
             </div>
           </div>
           <div className="mt-4  ">
-            <Button onClick={handleInitiatePaypalPayment} className=" w-full ">
-              Checkout with paypal
+            <Button
+              onClick={handleInitiatePaypalPayment}
+              className="w-full"
+              disabled={isPaymentStarted}
+            >
+              Checkout with PayPal
             </Button>
           </div>
         </div>
