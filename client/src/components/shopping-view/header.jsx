@@ -63,13 +63,18 @@ function HeaderRightContent() {
   function handleLogout() {
     dispatch(logoutUser());
   }
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    dispatch(getShoppingCartItems(user?.id));
-  }, [dispatch]);
+    const storedUserString = sessionStorage.getItem("user");
+    const storedUser = storedUserString ? JSON.parse(storedUserString) : null;
+    const userId = user?.id || storedUser?.id;
 
-  const { user } = useSelector((state) => state.auth);
-  console.log("USER DETAILS---->", user);
+    if (userId) {
+      dispatch(getShoppingCartItems(userId));
+    }
+  }, [dispatch, user]);
+
   const [openCartSheet, setOpenCartSheet] = useState(false);
 
   return (
