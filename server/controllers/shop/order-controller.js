@@ -1,8 +1,8 @@
 import { paypal, paypalClient } from "../../helpers/paypal.js";
 import Order from "../../models/Order.js";
-
 import Product from "../../models/Product.js";
 import Cart from "../../models/Cart.js";
+import mongoose from "mongoose";
 
 // CREATE ORDER - PayPal
 export const createOrder = async (req, res) => {
@@ -156,11 +156,8 @@ export const capturePayment = async (req, res) => {
       product.totalStock -= item.quantity;
       await product.save();
     }
-
-    // Remove the cart
-    if (order.cartId) {
-      await Cart.findByIdAndDelete(order.cartId);
-    }
+    const getCartId = order.cartId;
+    const cartResponse = await Cart.findByIdAndDelete(getCartId);
 
     // Save updated order
     await order.save();
@@ -178,3 +175,16 @@ export const capturePayment = async (req, res) => {
     });
   }
 };
+
+// async function deleteAllOrders() {
+//   try {
+//     await mongoose.connect(process.env.MONGO_URI); // replace with your URI or env var
+//     const result = await Order.deleteMany({});
+//     console.log(`Deleted ${result.deletedCount} orders.`);
+//     await mongoose.disconnect();
+//   } catch (err) {
+//     console.error("Error deleting orders:", err);
+//   }
+// }
+
+// deleteAllOrders();
