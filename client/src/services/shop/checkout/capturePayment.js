@@ -1,12 +1,13 @@
 import axios from "axios";
 
-export const capturePayment = async ({ token, payerID }) => {
+export const capturePayment = async ({ token, payerID, orderId }) => {
   try {
     const response = await axios.post(
       "http://localhost:3000/api/shop/order/capture-payment",
       {
         token,
         payerID,
+        orderId,
       }
     );
     return response.data;
