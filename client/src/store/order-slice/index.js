@@ -19,7 +19,8 @@ export const capturePaypalPayment = createAsyncThunk(
   "/order/capturePaypalPayment",
   async ({ token, payerID }, { rejectWithValue }) => {
     try {
-      const data = await capturePayment({ token, payerID });
+      const orderId = JSON.parse(sessionStorage.getItem("currentOrderId"));
+      const data = await capturePayment({ token, payerID, orderId });
       return data;
     } catch (err) {
       return rejectWithValue(
@@ -40,10 +41,11 @@ const shoppingOrderSlice = createSlice({
       .addCase(createNewOrder.fulfilled, (state, action) => {
         state.isLoading = false;
         state.approvalURL = action.payload.approvalURL;
-        state.orderId = action.payload.orderId;
+        //state.orderId = action.payload.orderId;
+        state.orderId = action.payload.mongoOrderId; // Use MongoDB ID ✅
         sessionStorage.setItem(
           "currentOrderId",
-          JSON.stringify(action.payload.orderId)
+          JSON.stringify(action.payload.mongoOrderId)
         );
       })
       .addCase(createNewOrder.rejected, (state) => {
