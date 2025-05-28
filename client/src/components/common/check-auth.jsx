@@ -9,7 +9,6 @@ function CheckAuth({ isAuthenticated, user, children }) {
   useEffect(() => {
     const storedUser = sessionStorage.getItem("user");
 
-    console.log("STORED USER--", storedUser);
     if (storedUser) {
       dispatch(
         setUserAuthenticated({
