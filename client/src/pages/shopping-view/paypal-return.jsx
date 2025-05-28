@@ -17,9 +17,8 @@ function PaypalReturnPage() {
   const token = params.get("token");
   const payerID = params.get("PayerID");
   useEffect(() => {
-    // const orderId = JSON.parse(sessionStorage.getItem("currentOrderId"));
     if (token && payerID) {
-      dispatch(capturePaypalPayment({ token, payerID })).then((data) => {
+      dispatch(capturePaypalPayment({ token, payerID })).then(async (data) => {
         if (data?.payload?.success) {
           sessionStorage.removeItem("currentOrderId");
           navigate("/shop/payment-success");
