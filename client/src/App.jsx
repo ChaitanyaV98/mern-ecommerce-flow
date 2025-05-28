@@ -22,6 +22,7 @@ import NotFound from "./pages/not-found";
 import { useEffect } from "react";
 import { checkAuth } from "./store/auth-slice";
 import PaypalReturnPage from "./pages/shopping-view/paypal-return";
+import PaymentSuccess from "./pages/shopping-view/payment-success";
 
 function App() {
   // const isaAuthenticated = true;
@@ -78,6 +79,7 @@ function App() {
           <Route path="checkout" element={<ShoppingCheckout />} />
           <Route path="account" element={<ShoppingAccount />} />
           <Route path="paypal-return" element={<PaypalReturnPage />} />
+          <Route path="payment-success" element={<PaymentSuccess />} />
         </Route>
         <Route path="/unauth-page" element={<UnauthPage />} />
         <Route path="*" element={<NotFound />} />
