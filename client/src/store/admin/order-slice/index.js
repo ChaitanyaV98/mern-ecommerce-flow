@@ -36,7 +36,11 @@ export const getOrderDetailsForAdmin = createAsyncThunk(
 const adminOrderSlice = createSlice({
   name: "adminOrderSlice",
   initialState,
-  reducer: {},
+  reducers: {
+    resetOrderDetails: (state) => {
+      state.orderDetails = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getAllOrdersForAdmin.pending, (state) => {
@@ -50,18 +54,20 @@ const adminOrderSlice = createSlice({
         state.isLoading = false;
         state.orderList = [];
       })
-      .addCase(getAllOrdersForAdmin.pending, (state) => {
+      .addCase(getOrderDetailsForAdmin.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getAllOrdersForAdmin.fulfilled, (state, action) => {
+      .addCase(getOrderDetailsForAdmin.fulfilled, (state, action) => {
         state.isLoading = false;
         state.orderDetails = action.payload.data;
       })
-      .addCase(getAllOrdersForAdmin.rejected, (state) => {
+      .addCase(getOrderDetailsForAdmin.rejected, (state) => {
         state.isLoading = false;
         state.orderDetails = null;
       });
   },
 });
+
+export const { resetOrderDetails } = adminOrderSlice.reducer;
 
 export default adminOrderSlice.reducer;
