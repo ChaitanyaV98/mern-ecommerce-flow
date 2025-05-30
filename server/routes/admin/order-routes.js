@@ -2,7 +2,7 @@ import express from "express";
 import {
   getAllOrdersOfAllUsers,
   getOrderDetailsForAdmin,
-} from "../../controllers/admin/order-controller";
+} from "../../controllers/admin/order-controller.js";
 
 const adminOrderRouter = express.Router();
 
