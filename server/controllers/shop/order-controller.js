@@ -176,19 +176,6 @@ export const capturePayment = async (req, res) => {
   }
 };
 
-// async function deleteAllOrders() {
-//   try {
-//     await mongoose.connect(process.env.MONGO_URI); // replace with your URI or env var
-//     const result = await Order.deleteMany({});
-//     console.log(`Deleted ${result.deletedCount} orders.`);
-//     await mongoose.disconnect();
-//   } catch (err) {
-//     console.error("Error deleting orders:", err);
-//   }
-// }
-
-// deleteAllOrders();
-
 export const getAllOrdersByUser = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -240,3 +227,16 @@ export const getOrderDetails = async (req, res) => {
     });
   }
 };
+
+// async function deleteAllOrders() {
+//   try {
+//     await mongoose.connect(process.env.MONGO_URI); // replace with your URI or env var
+//     const result = await Order.deleteMany({});
+//     console.log(`Deleted ${result.deletedCount} orders.`);
+//     await mongoose.disconnect();
+//   } catch (err) {
+//     console.error("Error deleting orders:", err);
+//   }
+// }
+
+// deleteAllOrders();
