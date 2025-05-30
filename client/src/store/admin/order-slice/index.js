@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import fetchAllOrders from "@/services/admin/fetchAllOrders";
 import fetchOrderDetails from "@/services/admin/fetchOrderDetails";
+import updateOrderDetails from "@/services/admin/updateOrderStatus";
 
 const initialState = {
   orderList: [],
@@ -25,6 +26,19 @@ export const getOrderDetailsForAdmin = createAsyncThunk(
   async (id) => {
     try {
       const data = await fetchOrderDetails(id);
+      return data;
+    } catch (err) {
+      console.log("Error--->>", err);
+      return err;
+    }
+  }
+);
+
+export const updateOrderDetailsForAdmin = createAsyncThunk(
+  "/order/updateOrderDetailsForAdmin",
+  async ({ id, orderStatus }) => {
+    try {
+      const data = await updateOrderDetails({ id, orderStatus });
       return data;
     } catch (err) {
       console.log("Error--->>", err);
