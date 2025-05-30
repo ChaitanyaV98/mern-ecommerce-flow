@@ -3,15 +3,33 @@ import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 import { useState } from "react";
 import CommonForm from "../common/form";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Badge } from "../ui/badge";
+import {
+  getAllOrdersForAdmin,
+  getOrderDetailsForAdmin,
+  updateOrderDetailsForAdmin,
+} from "@/store/admin/order-slice";
+
 function AdminOrderDetailsView({ orderDetails }) {
   const initialFormData = {
     status: "",
   };
 
-  function handleUpdateStatus(event) {
+  const dispatch = useDispatch();
+
+  async function handleUpdateStatus(event) {
     event.preventDefault();
+    const { status } = formData;
+    const data = await dispatch(
+      updateOrderDetailsForAdmin({ id: orderDetails?._id, orderStatus: status })
+    );
+    console.log("DATA---", data);
+    if (data?.payload?.success) {
+      await dispatch(getOrderDetailsForAdmin(orderDetails?._id));
+      await dispatch(getAllOrdersForAdmin());
+      setFormData(initialFormData);
+    }
   }
   const [formData, setFormData] = useState(initialFormData);
   const { user } = useSelector((state) => state.auth);
