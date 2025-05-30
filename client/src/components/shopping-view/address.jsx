@@ -25,6 +25,12 @@ function Address({ setCurrentSelectedAddress }) {
   const { user } = useSelector((state) => state.auth);
   const { addressList } = useSelector((state) => state.shopAddress);
 
+  useEffect(() => {
+    if (addressList && addressList.length > 0) {
+      setCurrentSelectedAddress(addressList[0]);
+    }
+  }, [addressList]);
+
   //   async function handleManageAddress(event) {
   //     event.preventDefault();
   //     try {
