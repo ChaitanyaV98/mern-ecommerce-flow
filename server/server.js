@@ -9,6 +9,7 @@ import cartRouter from "./routes/shop/cart-routes.js";
 import addressRouter from "./routes/shop/address-routes.js";
 import orderRouter from "./routes/shop/order-routes.js";
 import adminOrderRouter from "./routes/admin/order-routes.js";
+import searchRouter from "./routes/shop/search-routes.js";
 
 const app = express();
 
@@ -56,6 +57,7 @@ app.use("/api/shop/products", shopProductRouter);
 app.use("/api/shop/cart", cartRouter);
 app.use("/api/shop/address", addressRouter);
 app.use("/api/shop/order", orderRouter);
+app.use("/api/shop/search", searchRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running at ${PORT}`);
