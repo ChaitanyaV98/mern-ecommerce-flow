@@ -117,12 +117,7 @@ function ShoppingListing() {
           return;
         }
       }
-      console.log(currentProductId, "currentProductId");
-      console.log({
-        userId: user.id,
-        productId: currentProductId,
-        quantity: 1,
-      });
+
       const resultAction = await dispatch(
         addToShoppingCart({
           userId: user.id,
