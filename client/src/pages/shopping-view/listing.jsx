@@ -32,6 +32,7 @@ function ShoppingListing() {
   const { productList, productDetails } = useSelector(
     (state) => state.shopProducts
   );
+  const { cartItems } = useSelector((state) => state.shopCart);
 
   const { user } = useSelector((state) => state.auth);
 
@@ -99,8 +100,23 @@ function ShoppingListing() {
     return queryParams.join("&");
   }
 
-  async function handleAddToCart(currentProductId) {
+  async function handleAddToCart(currentProductId, totalStock) {
     try {
+      const itemsInCart = cartItems.items || [];
+
+      // Check if the product already exists in the cart
+      const existingItemIndex = itemsInCart.findIndex(
+        (item) => item.productId === currentProductId
+      );
+
+      if (existingItemIndex !== -1) {
+        const currentQuantity = itemsInCart[existingItemIndex].quantity;
+
+        if (currentQuantity + 1 > totalStock) {
+          alert(`Only ${currentQuantity} quantity can be added for this item`);
+          return;
+        }
+      }
       console.log(currentProductId, "currentProductId");
       console.log({
         userId: user.id,
