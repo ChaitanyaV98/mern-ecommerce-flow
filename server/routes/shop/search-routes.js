@@ -1,6 +1,6 @@
-import { searchProducts } from "../../controllers/shop/search-controller";
+import { searchProducts } from "../../controllers/shop/search-controller.js";
 
-const express = require("express");
+import express from "express";
 
 const searchRouter = express.Router();
 
