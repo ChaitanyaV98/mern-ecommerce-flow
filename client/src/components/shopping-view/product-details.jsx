@@ -12,9 +12,25 @@ import { setProductDetails } from "@/store/shop/productSlice";
 function ProductDetailsDialog({ open, setOpen, productDetails }) {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  async function handleAddToCart(currentProductId) {
+  const { cartItems } = useSelector((state) => state.shopCart);
+
+  async function handleAddToCart(currentProductId, totalStock) {
     try {
-      console.log(currentProductId, "currentProductId");
+      const itemsInCart = cartItems.items || [];
+
+      // Check if the product already exists in the cart
+      const existingItemIndex = itemsInCart.findIndex(
+        (item) => item.productId === currentProductId
+      );
+
+      if (existingItemIndex !== -1) {
+        const currentQuantity = itemsInCart[existingItemIndex].quantity;
+
+        if (currentQuantity + 1 > totalStock) {
+          alert(`Only ${currentQuantity} quantity can be added for this item`);
+          return;
+        }
+      }
 
       const resultAction = await dispatch(
         addToShoppingCart({
