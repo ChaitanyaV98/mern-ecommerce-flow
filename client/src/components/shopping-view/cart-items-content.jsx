@@ -6,6 +6,8 @@ import { deleteShopCartItem, updateShopCartQty } from "@/store/shop/cartSlice";
 function UserCartItemsContent({ cartItem }) {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const { cartItems } = useSelector((state) => state.shopCart);
+  const { productList } = useSelector((state) => state.shopProducts);
 
   async function handleCartItemDelete(getCartItem) {
     try {
@@ -21,6 +23,30 @@ function UserCartItemsContent({ cartItem }) {
   }
   async function handleUpdateQuantity(cartItem, typeOfAction) {
     try {
+      if (typeOfAction === "plus") {
+        const itemsInCart = cartItems.items || [];
+
+        //check how many items are in cart
+        const existingItemIndex = itemsInCart.findIndex(
+          (item) => item.productId === cartItem.productId
+        );
+        //check how many items are in actual stock
+        const getCurrentProductIndex = productList.findIndex(
+          (product) => product._id === cartItem?.productId
+        );
+        const totalStock = productList[getCurrentProductIndex].totalStock;
+
+        if (existingItemIndex !== -1) {
+          const currentQuantity = itemsInCart[existingItemIndex].quantity;
+
+          if (currentQuantity + 1 > totalStock) {
+            alert(
+              `Only ${currentQuantity} quantity can be added for this item`
+            );
+            return;
+          }
+        }
+      }
       const data = await dispatch(
         updateShopCartQty({
           userId: user?.id,
