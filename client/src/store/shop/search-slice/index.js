@@ -30,7 +30,7 @@ const searchSlice = createSlice({
       .addCase(getSearchResults.pending, (state) => {
         state.isLoading = true;
       })
-      .addCaseaddCase(getSearchResults.fulfilled, (state, action) => {
+      .addCase(getSearchResults.fulfilled, (state, action) => {
         state.isLoading = false;
         state.searchResults = action.payload.data;
       })
