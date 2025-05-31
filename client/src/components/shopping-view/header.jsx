@@ -25,7 +25,9 @@ function MenuItems() {
     sessionStorage.removeItem("filters");
 
     const currentFilter =
-      currentMenuItem.id !== "home" && currentMenuItem.id !== "products"
+      currentMenuItem.id !== "home" &&
+      currentMenuItem.id !== "products" &&
+      currentMenuItem.id !== "search"
         ? {
             category: [currentMenuItem.id],
           }
