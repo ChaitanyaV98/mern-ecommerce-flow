@@ -1,3 +1,4 @@
+import dotenv from "dotenv";
 import express from "express";
 import { connectToDb } from "./database/db.js";
 import cookieParser from "cookie-parser";
@@ -12,13 +13,13 @@ import adminOrderRouter from "./routes/admin/order-routes.js";
 import searchRouter from "./routes/shop/search-routes.js";
 
 const app = express();
-
+dotenv.config();
 const PORT = process.env.PORT || 3000;
 
 //connect to db
 connectToDb();
 
-const allowedOrigins = ["http://localhost:5173"];
+const allowedOrigins = [process.env.CLIENT_BASE_URL];
 
 //middleware- cors config
 app.use(
