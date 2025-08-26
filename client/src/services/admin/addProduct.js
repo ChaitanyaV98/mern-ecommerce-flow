@@ -2,8 +2,9 @@ import axios from "axios";
 
 const addProduct = async (formData) => {
   try {
+    const API = import.meta.env.VITE_API_URL;
     const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/admin/products/add`,
+      `${API}/api/admin/products/add`,
       formData,
       {
         headers: {

@@ -2,10 +2,9 @@ import axios from "axios";
 
 export const editAddress = async ({ userId, addressId, formData }) => {
   try {
+    const API = import.meta.env.VITE_API_URL;
     const response = await axios.put(
-      `${
-        import.meta.env.VITE_API_URL
-      }/api/shop/address/update/${userId}/${addressId}`,
+      `${API}/api/shop/address/update/${userId}/${addressId}`,
       formData
     );
     console.log("Update responseeee---", response);

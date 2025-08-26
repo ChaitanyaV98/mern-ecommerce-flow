@@ -2,8 +2,9 @@ import axios from "axios";
 
 export const createOrder = async (orderData) => {
   try {
+    const API = import.meta.env.VITE_API_URL;
     const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/shop/order/create-order`,
+      `${API}/api/shop/order/create-order`,
       orderData
     );
     return response.data;

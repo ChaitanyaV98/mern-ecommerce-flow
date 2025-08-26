@@ -2,9 +2,8 @@ import axios from "axios";
 
 const fetchOrderDetails = async (id) => {
   try {
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/shop/order/details/${id}`
-    );
+    const API = import.meta.env.VITE_API_URL;
+    const response = await axios.get(`${API}/api/shop/order/details/${id}`);
     return response.data;
   } catch (error) {
     console.log("Error while fetching cart items", error);

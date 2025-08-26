@@ -11,11 +11,11 @@ export const registerUser = createAsyncThunk(
   "/auth/register",
   async (formData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/register`,
-        formData,
-        { withCredentials: true }
-      );
+      const API = import.meta.env.VITE_API_URL;
+
+      const response = await axios.post(`${API}/api/auth/register`, formData, {
+        withCredentials: true,
+      });
       return response.data;
     } catch (error) {
       // Handle error: return custom error message if available
@@ -32,11 +32,10 @@ export const loginUser = createAsyncThunk(
   "/auth/login",
   async (formData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/login`,
-        formData,
-        { withCredentials: true }
-      );
+      const API = import.meta.env.VITE_API_URL;
+      const response = await axios.post(`${API}/api/auth/login`, formData, {
+        withCredentials: true,
+      });
       return response.data;
     } catch (error) {
       // Handle error: return custom error message if available
@@ -53,16 +52,14 @@ export const checkAuth = createAsyncThunk(
   "/auth/checkauth",
 
   async () => {
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/auth/check-auth`,
-      {
-        withCredentials: true,
-        headers: {
-          "Cache-Control":
-            "no-store, no-cache, must-revalidate, proxy-revalidate",
-        },
-      }
-    );
+    const API = import.meta.env.VITE_API_URL;
+    const response = await axios.get(`${API}/api/auth/check-auth`, {
+      withCredentials: true,
+      headers: {
+        "Cache-Control":
+          "no-store, no-cache, must-revalidate, proxy-revalidate",
+      },
+    });
     console.log("RESPONSE OF CHECK AUTHHHHHH----", response);
     return response.data;
   }
@@ -72,8 +69,9 @@ export const logoutUser = createAsyncThunk(
   "/auth/logout",
 
   async () => {
+    const API = import.meta.env.VITE_API_URL;
     const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/auth/logout`,
+      `${API}/api/auth/logout`,
       {},
       {
         withCredentials: true,

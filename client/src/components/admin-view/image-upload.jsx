@@ -50,12 +50,13 @@ function ProductImageUpload({
   }
 
   async function uploadImageToCloudinary() {
+    const API = import.meta.env.VITE_API_URL;
     setImageLoadingState(true);
     const payload = new FormData();
     payload.append("my-file", imageFile);
     console.log("DATA FOR UPLOAD IMAGE", payload);
     const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/admin/products/upload-image`,
+      `${API}/api/admin/products/upload-image`,
       payload
     );
     if (response) {

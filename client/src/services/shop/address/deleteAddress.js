@@ -2,10 +2,9 @@ import axios from "axios";
 
 export const deleteAddress = async ({ userId, addressId }) => {
   try {
+    const API = import.meta.env.VITE_API_URL;
     const response = await axios.delete(
-      `${
-        import.meta.env.VITE_API_URL
-      }/api/shop/address/delete/${userId}/${addressId}`
+      `${API}/api/shop/address/delete/${userId}/${addressId}`
     );
     console.log("response data after delete", response.data);
     return response.data;

@@ -6,9 +6,8 @@ const getAllFilteredProducts = async ({ filterParams, sortParams }) => {
       ...filterParams,
       sortBy: sortParams,
     });
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/shop/products/get?${query}`
-    );
+    const API = import.meta.env.VITE_API_URL;
+    const response = await axios.get(`${API}/api/shop/products/get?${query}`);
     return response.data;
   } catch (error) {
     console.log("Error while fetching products", error);
