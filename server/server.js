@@ -45,11 +45,17 @@ connectToDb();
 //     credentials: true,
 //   })
 // );
-console.log("CLIENT_BASE_URL:", process.env.CLIENT_BASE_URL);
+const allowedOrigins = process.env.CLIENT_BASE_URL.split(",");
 
 app.use(
   cors({
-    origin: process.env.CLIENT_BASE_URL,
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true); // allow tools like Postman
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error("Not allowed by CORS"));
+    },
     methods: ["GET", "POST", "DELETE", "PUT"],
     allowedHeaders: [
       "Content-Type",
