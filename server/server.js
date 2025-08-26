@@ -45,6 +45,8 @@ connectToDb();
 //     credentials: true,
 //   })
 // );
+console.log("CLIENT_BASE_URL:", process.env.CLIENT_BASE_URL);
+
 app.use(
   cors({
     origin: process.env.CLIENT_BASE_URL,
