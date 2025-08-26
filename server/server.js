@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 3000;
 //connect to db
 connectToDb();
 
-const allowedOrigins = [process.env.CLIENT_BASE_URL];
+const allowedOrigins = [process.env.CLIENT_BASE_URL, "http://localhost:5173"];
 
 //middleware- cors config
 app.use(
