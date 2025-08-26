@@ -45,19 +45,10 @@ connectToDb();
 //     credentials: true,
 //   })
 // );
-const allowedOrigins = [process.env.CLIENT_BASE_URL, "http://localhost:5173"];
-
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.some((o) => origin.startsWith(o))) {
-        return callback(null, true);
-      }
-      return callback(new Error("Not allowed by CORS"));
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: process.env.CLIENT_BASE_URL,
+    methods: ["GET", "POST", "DELETE", "PUT"],
     allowedHeaders: [
       "Content-Type",
       "Authorization",
@@ -65,6 +56,7 @@ app.use(
       "Expires",
       "Pragma",
     ],
+    credentials: true,
   })
 );
 
