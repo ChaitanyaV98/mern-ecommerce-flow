@@ -19,22 +19,45 @@ const PORT = process.env.PORT || 3000;
 //connect to db
 connectToDb();
 
-const allowedOrigins = [process.env.CLIENT_BASE_URL, "http://localhost:5173"];
+//const allowedOrigins = [process.env.CLIENT_BASE_URL, "http://localhost:5173"];
 
 //middleware- cors config
+// app.use(
+//   cors({
+//     origin: (origin, callback) => {
+//       // Allow requests with no origin (like mobile apps or curl)
+//       if (!origin) return callback(null, true);
+//       if (allowedOrigins.includes(origin)) {
+//         return callback(null, true);
+//       } else {
+//         return callback(new Error("Not allowed by CORS"));
+//       }
+//     },
+//     methods: ["GET", "POST", "PUT", "DELETE"],
+
+//     allowedHeaders: [
+//       "Content-Type",
+//       "Authorization",
+//       "Cache-Control",
+//       "Expires",
+//       "Pragma",
+//     ],
+//     credentials: true,
+//   })
+// );
+const allowedOrigins = [process.env.CLIENT_BASE_URL, "http://localhost:5173"];
+
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps or curl)
       if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) {
+      if (allowedOrigins.some((o) => origin.startsWith(o))) {
         return callback(null, true);
-      } else {
-        return callback(new Error("Not allowed by CORS"));
       }
+      return callback(new Error("Not allowed by CORS"));
     },
+    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
-
     allowedHeaders: [
       "Content-Type",
       "Authorization",
@@ -42,7 +65,6 @@ app.use(
       "Expires",
       "Pragma",
     ],
-    credentials: true,
   })
 );
 
