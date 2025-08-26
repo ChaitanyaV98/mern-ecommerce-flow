@@ -3,7 +3,7 @@ import axios from "axios";
 const fetchCartItems = async (userId) => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/shop/cart/get/${userId}`
+      `${import.meta.env.VITE_API_URL}/api/shop/cart/get/${userId}`
     );
     return response.data;
   } catch (error) {

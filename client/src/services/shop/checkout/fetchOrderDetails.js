@@ -3,7 +3,7 @@ import axios from "axios";
 const fetchOrderDetails = async (id) => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/shop/order/details/${id}`
+      `${import.meta.env.VITE_API_URL}/api/shop/order/details/${id}`
     );
     return response.data;
   } catch (error) {

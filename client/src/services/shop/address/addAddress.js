@@ -3,7 +3,7 @@ import axios from "axios";
 export const addAddress = async (formData) => {
   try {
     const response = await axios.post(
-      "http://localhost:3000/api/shop/address/add",
+      `${import.meta.env.VITE_API_URL}/api/shop/address/add`,
       formData
     );
     return response.data;

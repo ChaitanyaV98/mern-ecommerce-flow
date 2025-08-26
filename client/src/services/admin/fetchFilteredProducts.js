@@ -7,7 +7,7 @@ const getAllFilteredProducts = async ({ filterParams, sortParams }) => {
       sortBy: sortParams,
     });
     const response = await axios.get(
-      `http://localhost:3000/api/shop/products/get?${query}`
+      `${import.meta.env.VITE_API_URL}/api/shop/products/get?${query}`
     );
     return response.data;
   } catch (error) {

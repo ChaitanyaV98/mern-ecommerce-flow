@@ -3,7 +3,7 @@ import axios from "axios";
 export const capturePayment = async ({ token, payerID, orderId }) => {
   try {
     const response = await axios.post(
-      "http://localhost:3000/api/shop/order/capture-payment",
+      `${import.meta.env.VITE_API_URL}/api/shop/order/capture-payment`,
       {
         token,
         payerID,

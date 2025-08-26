@@ -3,7 +3,7 @@ import axios from "axios";
 const updateOrderDetails = async ({ id, orderStatus }) => {
   try {
     const response = await axios.put(
-      `http://localhost:3000/api/admin/order/update/${id}`,
+      `${import.meta.env.VITE_API_URL}/api/admin/order/update/${id}`,
       {
         orderStatus,
       }

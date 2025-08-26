@@ -3,7 +3,7 @@ import axios from "axios";
 const addProduct = async (formData) => {
   try {
     const response = await axios.post(
-      "http://localhost:3000/api/admin/products/add",
+      `${import.meta.env.VITE_API_URL}/api/admin/products/add`,
       formData,
       {
         headers: {

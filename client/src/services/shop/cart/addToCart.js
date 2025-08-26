@@ -3,7 +3,7 @@ import axios from "axios";
 export const addToCart = async ({ userId, productId, quantity }) => {
   try {
     const response = await axios.post(
-      "http://localhost:3000/api/shop/cart/add",
+      `${import.meta.env.VITE_API_URL}/api/shop/cart/add`,
       {
         userId,
         productId,

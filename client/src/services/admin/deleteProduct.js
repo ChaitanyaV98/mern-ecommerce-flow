@@ -3,7 +3,7 @@ import axios from "axios";
 const deleteProduct = async (id) => {
   try {
     const response = await axios.delete(
-      `http://localhost:3000/api/admin/products/delete/${id}`
+      `${import.meta.env.VITE_API_URL}/api/admin/products/delete/${id}`
     );
     return response.data;
   } catch (error) {
